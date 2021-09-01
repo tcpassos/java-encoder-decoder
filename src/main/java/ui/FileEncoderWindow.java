@@ -1,11 +1,15 @@
 package ui;
 
+import bean.CodingType;
 import encoder.FileEncoder;
 import java.io.File;
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -21,7 +25,6 @@ public class FileEncoderWindow extends javax.swing.JFrame {
     public FileEncoderWindow() {
         initComponents();
         this.fileEncoder = new FileEncoder();
-        this.setResizable(false);
     }
 
     /**
@@ -33,7 +36,7 @@ public class FileEncoderWindow extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jEncodingTypeField = new javax.swing.JComboBox<>();
+        jCodingTypeField = new javax.swing.JComboBox<>();
         jDividerField = new javax.swing.JSpinner();
         jLabel2 = new javax.swing.JLabel();
         jEncodeButton = new javax.swing.JButton();
@@ -44,12 +47,13 @@ public class FileEncoderWindow extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Codificador/Decodificador");
+        setResizable(false);
 
-        jEncodingTypeField.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Golomb" }));
-        jEncodingTypeField.setEnabled(false);
-        jEncodingTypeField.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+        jCodingTypeField.setModel(_getCodingTypeOptions());
+        jCodingTypeField.setEnabled(false);
+        jCodingTypeField.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
             public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                jEncodingTypeFieldPropertyChange(evt);
+                jCodingTypeFieldPropertyChange(evt);
             }
         });
 
@@ -94,7 +98,7 @@ public class FileEncoderWindow extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jEncodeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jEncodingTypeField, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jCodingTypeField, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -117,7 +121,7 @@ public class FileEncoderWindow extends javax.swing.JFrame {
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 5, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jEncodingTypeField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jCodingTypeField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jDividerField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
                     .addComponent(jEncodeButton))
@@ -126,8 +130,8 @@ public class FileEncoderWindow extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jEncodingTypeField.getAccessibleContext().setAccessibleName("");
-        jEncodingTypeField.getAccessibleContext().setAccessibleDescription("");
+        jCodingTypeField.getAccessibleContext().setAccessibleName("");
+        jCodingTypeField.getAccessibleContext().setAccessibleDescription("");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -139,18 +143,15 @@ public class FileEncoderWindow extends javax.swing.JFrame {
             file = chooser.getSelectedFile();
             jFilePath.setText(file.getAbsolutePath());
             jEncodeButton.setEnabled(true);
-            jEncodingTypeField.setEnabled(true);
+            jCodingTypeField.setEnabled(true);
             _enableDisableDividerField();
             jDecodeButton.setEnabled(true);
         }
     }//GEN-LAST:event_jFileChooserMousePressed
 
     private void jEncodeButtonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jEncodeButtonMousePressed
-        String output = "";
-        switch ((String) jEncodingTypeField.getSelectedItem()) {
-            case "Golomb":
-                output = fileEncoder.encodeGolomb(file.getAbsolutePath(), _getDivider());
-        }
+        CodingType coding = CodingType.findByName((String) jCodingTypeField.getSelectedItem());
+        String output = fileEncoder.encode(file.getAbsolutePath(), coding, _getDivider());
         File outputFile = new File(output);
         JOptionPane.showMessageDialog(null, "O arquivo " + file.getName() + " passou de " + file.length() + " bytes para " + outputFile.length() + " bytes");
     }//GEN-LAST:event_jEncodeButtonMousePressed
@@ -160,12 +161,12 @@ public class FileEncoderWindow extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(null, "O arquivo " + file.getName() + " foi decodificado com sucesso!");
     }//GEN-LAST:event_jDecodeButtonMousePressed
 
-    private void jEncodingTypeFieldPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jEncodingTypeFieldPropertyChange
+    private void jCodingTypeFieldPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jCodingTypeFieldPropertyChange
         _enableDisableDividerField();
-    }//GEN-LAST:event_jEncodingTypeFieldPropertyChange
+    }//GEN-LAST:event_jCodingTypeFieldPropertyChange
 
     private void _enableDisableDividerField() {
-        boolean isEnabled = Objects.nonNull(file) && "Golomb".equals((String) jEncodingTypeField.getSelectedItem());
+        boolean isEnabled = Objects.nonNull(file) && "Golomb".equals((String) jCodingTypeField.getSelectedItem());
         jDividerField.setEnabled(isEnabled);
     }
 
@@ -178,6 +179,13 @@ public class FileEncoderWindow extends javax.swing.JFrame {
         return (int) jDividerField.getValue();
     }
 
+    private DefaultComboBoxModel _getCodingTypeOptions() {
+        String[] options = Arrays.asList(CodingType.values()).stream()
+                .map(coding -> coding.getName())
+                .toArray(size -> new String[size]);
+        return new DefaultComboBoxModel(options);
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -191,17 +199,11 @@ public class FileEncoderWindow extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FileEncoderWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FileEncoderWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FileEncoderWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(FileEncoderWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
             new FileEncoderWindow().setVisible(true);
@@ -209,10 +211,10 @@ public class FileEncoderWindow extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> jCodingTypeField;
     private javax.swing.JButton jDecodeButton;
     private javax.swing.JSpinner jDividerField;
     private javax.swing.JButton jEncodeButton;
-    private javax.swing.JComboBox<String> jEncodingTypeField;
     private javax.swing.JButton jFileChooser;
     private javax.swing.JLabel jFilePath;
     private javax.swing.JLabel jLabel2;

@@ -8,44 +8,41 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
+import bean.CodingType;
 
 public class FileEncoder {
-    
-    private final int ENCODING_TYPE_GOLOMB = 0;
-    
-    public String encodeGolomb(String inputFileName, int k) {
-        return _encode(inputFileName, ENCODING_TYPE_GOLOMB, k);
-    }
-    
-    public void decode(String inputFileName) {
-        String outputFileName = inputFileName.concat(".dec");
-        try(BufferedReader reader = _getReader(inputFileName); OutputStreamWriter writer = _getWriter(outputFileName)) {
-            Encoder encoder = _getDecoder(reader);
-            encoder.decode(reader, writer);
-        } catch (IOException ex) {
-            System.exit(1);
-        }
-    }
-    
-    private String _encode(String inputFileName, int encodingType, int k) {
+
+    public String encode(String inputFileName, CodingType coding, int k) {
         String outputFileName = inputFileName.concat(".enc");
         try(BufferedReader reader = _getReader(inputFileName); OutputStreamWriter writer = _getWriter(outputFileName)) {
-            writer.write(encodingType);
+            writer.write(coding.getHeader());
             writer.write(k);
-            Encoder encoder = new GolombEncoder(k);
+            Encoder encoder = _getEncoderByType(coding, k);
             encoder.encode(reader, writer);
         } catch (IOException ex) {
             System.exit(1);
         }
         return outputFileName;
     }
-
-    private Encoder _getDecoder(BufferedReader reader) throws IOException {
-        int encoding = reader.read();
-        int k = reader.read();
-        switch (encoding) {
-            case ENCODING_TYPE_GOLOMB:
+    
+    public void decode(String inputFileName) {
+        String outputFileName = inputFileName.concat(".dec");
+        try(BufferedReader reader = _getReader(inputFileName); OutputStreamWriter writer = _getWriter(outputFileName)) {
+            int coding = reader.read();
+            int k = reader.read();
+            Encoder encoder = _getEncoderByType(CodingType.findByHeader(coding), k);
+            encoder.decode(reader, writer);
+        } catch (IOException ex) {
+            System.exit(1);
+        }
+    }
+    
+    private Encoder _getEncoderByType(CodingType coding, int k) {
+        switch (coding) {
+            case GOLOMB:
                 return new GolombEncoder(k);
+            case ELIAS_GAMMA:
+                return new EliasGammaEncoder();
             default:
                 throw new IllegalArgumentException();
         }
