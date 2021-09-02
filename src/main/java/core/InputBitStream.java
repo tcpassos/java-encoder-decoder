@@ -10,14 +10,15 @@ import java.security.InvalidParameterException;
 public class InputBitStream {
 
     private final int FILLED_BYTE = 0b11111111;
+
     private InputStream reader;
-    private int currentByte;
-    private int nextByte;
-    private int remaining;
+    private int[] buffer;
+    private int allocatedInBuffer;
 
     public InputBitStream(InputStream reader) {
         this.reader = reader;
-        this.remaining = 0;
+        this.buffer = new int[2];
+        this.allocatedInBuffer = 0;
     }
 
     /**
@@ -52,9 +53,9 @@ public class InputBitStream {
         if (!hasNext()) {
             return -1;
         }
-        int byteToReturn = currentByte >> (Byte.SIZE - length);
+        int byteToReturn = buffer[0] >> (Byte.SIZE - length);
         _shiftLeft(length);
-        remaining -= length;
+        allocatedInBuffer -= length;
         return byteToReturn;
     }
     
@@ -78,7 +79,7 @@ public class InputBitStream {
         if (!hasNext()) {
             return false;
         }
-        int nextBit = currentByte >> (Byte.SIZE - 1);
+        int nextBit = buffer[0] >> (Byte.SIZE - 1);
         return nextBit > 0;
     }
 
@@ -90,7 +91,7 @@ public class InputBitStream {
      */
     public boolean hasNext() throws IOException {
         _fetchNextByte();
-        return remaining > 0;
+        return allocatedInBuffer > 0;
     }
 
     /**
@@ -99,15 +100,15 @@ public class InputBitStream {
      * @throws IOException 
      */
     private void _fetchNextByte() throws IOException {
-        if (remaining > Byte.SIZE) {
+        if (allocatedInBuffer > Byte.SIZE) {
             return;
         }
         int next = reader.read();
         if (next != -1) {
-            nextByte = next;
-            currentByte |= nextByte >> remaining;
-            nextByte = (nextByte << (Byte.SIZE - remaining)) & FILLED_BYTE;
-            remaining += Byte.SIZE;
+            buffer[1] = next;
+            buffer[0] |= buffer[1] >> allocatedInBuffer;
+            buffer[1] = (buffer[1] << (Byte.SIZE - allocatedInBuffer)) & FILLED_BYTE;
+            allocatedInBuffer += Byte.SIZE;
         }
     }
 
@@ -117,9 +118,9 @@ public class InputBitStream {
      * @param shift Quantidade de bits a serem deslocados
      */
     private void _shiftLeft(int shift) {
-        currentByte = (currentByte << shift) & FILLED_BYTE;
-        currentByte |= nextByte >> (Byte.SIZE - shift);
-        nextByte = (nextByte << shift) & FILLED_BYTE;
+        buffer[0] = (buffer[0] << shift) & FILLED_BYTE;
+        buffer[0] |= buffer[1] >> (Byte.SIZE - shift);
+        buffer[1] = (buffer[1] << shift) & FILLED_BYTE;
     }
 
 }

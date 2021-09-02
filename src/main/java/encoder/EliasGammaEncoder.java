@@ -1,7 +1,9 @@
 package encoder;
 
+import bean.CodingType;
 import core.InputBitStream;
 import core.OutputBitStream;
+import encoder.util.FileEncoderUtils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -10,6 +12,7 @@ public class EliasGammaEncoder implements Encoder {
 
     @Override
     public void encode(InputStream reader, OutputStream writer) throws IOException {
+        FileEncoderUtils.writeHeader(writer, CodingType.ELIAS_GAMMA);
         OutputBitStream bstream = new OutputBitStream(writer);
         int symbol = reader.read();
         while (symbol != -1) {
@@ -20,7 +23,7 @@ public class EliasGammaEncoder implements Encoder {
             bstream.writeByte((int) (symbol - Math.pow(2, n)), n);
             symbol = reader.read();
         }
-        bstream.writeRemaining();
+        bstream.flush();
     }
 
     @Override

@@ -1,7 +1,9 @@
 package encoder;
 
+import bean.CodingType;
 import core.OutputBitStream;
 import core.InputBitStream;
+import encoder.util.FileEncoderUtils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -18,6 +20,7 @@ public class GolombEncoder implements Encoder {
 
     @Override
     public void encode(InputStream reader, OutputStream writer) throws IOException {
+        FileEncoderUtils.writeHeader(writer, CodingType.GOLOMB, divider);
         OutputBitStream bstream = new OutputBitStream(writer);
         int symbol = reader.read();
         while (symbol != -1) {
@@ -26,7 +29,7 @@ public class GolombEncoder implements Encoder {
             bstream.writeByte(symbol % divider, binarySequenceSize);
             symbol = reader.read();
         }
-        bstream.writeRemaining();
+        bstream.flush();
     }
     
     @Override

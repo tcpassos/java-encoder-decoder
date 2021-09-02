@@ -1,7 +1,9 @@
 package encoder;
 
+import bean.CodingType;
 import core.InputBitStream;
 import core.OutputBitStream;
+import encoder.util.FileEncoderUtils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -21,6 +23,7 @@ public class FibonacciEncoder implements Encoder {
 
     @Override
     public void encode(InputStream reader, OutputStream writer) throws IOException {
+        FileEncoderUtils.writeHeader(writer, CodingType.FIBONACCI);
         OutputBitStream bstream = new OutputBitStream(writer);
         int symbol = reader.read();
         while (symbol != -1) {
@@ -29,7 +32,7 @@ public class FibonacciEncoder implements Encoder {
             bstream.writeBit(true);
             symbol = reader.read();
         }
-        bstream.writeRemaining();
+        bstream.flush();
     }
 
     @Override

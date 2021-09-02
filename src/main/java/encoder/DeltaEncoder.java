@@ -1,7 +1,9 @@
 package encoder;
 
+import bean.CodingType;
 import core.InputBitStream;
 import core.OutputBitStream;
+import encoder.util.FileEncoderUtils;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -17,12 +19,20 @@ public class DeltaEncoder implements Encoder {
     
     private int suffixLength;
 
+    public DeltaEncoder() {
+        this.suffixLength = 0;
+    }
+
+    public DeltaEncoder(int suffixLength) {
+        this.suffixLength = suffixLength;
+    }
+
     @Override
     public void encode(InputStream inputStream, OutputStream writer) throws IOException {
         InputStream reader = _loadLengthAndgetStream(inputStream);
+        FileEncoderUtils.writeHeader(writer, CodingType.DELTA, suffixLength);
         int current = reader.read();
         int previous;
-        writer.write(suffixLength); // Parametro com o tamanho do sufixo
         if (current != -1) writer.write(current); // Primeiro simbolo
         OutputBitStream bstream = new OutputBitStream(writer);
         while (current != -1) {
@@ -37,12 +47,11 @@ public class DeltaEncoder implements Encoder {
                 bstream.writeByte(Math.abs(current - previous) - 1, suffixLength);
             }
         }
-        bstream.writeRemaining();
+        bstream.flush();
     }
 
     @Override
     public void decode(InputStream reader, OutputStream writer) throws IOException {
-        suffixLength = reader.read(); // Parametro com o tamanho do sufixo
         int current = reader.read(); // Primeiro simbolo
         int previous = current;
         InputBitStream bstream = new InputBitStream(reader);

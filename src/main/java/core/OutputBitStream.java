@@ -81,11 +81,11 @@ public class OutputBitStream {
     }
     
     /**
-     * Escreve o byte restante na stream
+     * Forca a escrita dos bits restantes da stream
      *
      * @throws IOException
      */
-    public void writeRemaining() throws IOException {
+    public void flush() throws IOException {
         if (buffer != EMPTY_BYTE) {
             // System.out.print(String.format("%8s", Integer.toBinaryString(buffer)).replace(' ', '0'));
             writer.write(buffer);
