@@ -19,10 +19,12 @@ public class FileEncoderWindow extends javax.swing.JFrame {
 
     private File file;
     private FileEncoder fileEncoder;
+    private JFileChooser fileChooser;
 
     public FileEncoderWindow() {
         initComponents();
         this.fileEncoder = new FileEncoder();
+        this.fileChooser = new JFileChooser();
     }
 
     /**
@@ -135,9 +137,8 @@ public class FileEncoderWindow extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jFileChooserMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jFileChooserMousePressed
-        JFileChooser chooser = new JFileChooser();
-        if (chooser.showOpenDialog(FileEncoderWindow.this) == JFileChooser.APPROVE_OPTION) {
-            file = chooser.getSelectedFile();
+        if (fileChooser.showOpenDialog(FileEncoderWindow.this) == JFileChooser.APPROVE_OPTION) {
+            file = fileChooser.getSelectedFile();
             jFilePath.setText(file.getAbsolutePath());
             jEncodeButton.setEnabled(true);
             jCodingTypeField.setEnabled(true);

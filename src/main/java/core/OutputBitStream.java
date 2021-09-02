@@ -86,7 +86,10 @@ public class OutputBitStream {
      * @throws IOException
      */
     public void writeRemaining() throws IOException {
-        if (currentByte != EMPTY_BYTE) writer.write(currentByte);
+        if (currentByte != EMPTY_BYTE) {
+            // System.out.print(String.format("%8s", Integer.toBinaryString(currentByte)).replace(' ', '0'));
+            writer.write(currentByte);
+        }
     }
     
     /**

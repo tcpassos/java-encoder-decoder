@@ -43,6 +43,8 @@ public class FileEncoder {
                 return new EliasGammaEncoder();
             case FIBONACCI:
                 return new FibonacciEncoder();
+            case UNARY:
+                return new UnaryEncoder();
             default:
                 throw new IllegalArgumentException();
         }

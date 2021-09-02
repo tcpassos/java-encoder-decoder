@@ -78,8 +78,7 @@ public class InputBitStream {
         if (!hasNext()) {
             return false;
         }
-        int shift = remaining >= Byte.SIZE ? Byte.SIZE - 1 : remaining - 1;
-        int nextBit = currentByte >> shift;
+        int nextBit = currentByte >> (Byte.SIZE - 1);
         return nextBit > 0;
     }
 
