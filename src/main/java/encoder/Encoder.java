@@ -1,13 +1,13 @@
 package encoder;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 public interface Encoder {
     
-    public void encode(BufferedReader reader, OutputStreamWriter writer) throws IOException;
+    public void encode(InputStream reader, OutputStream writer) throws IOException;
     
-    public void decode(BufferedReader reader, OutputStreamWriter writer) throws IOException;
+    public void decode(InputStream reader, OutputStream writer) throws IOException;
     
 }

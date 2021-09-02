@@ -11,7 +11,6 @@ import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  * Janela principal do programa de codificacao e decodificacao de arquivos
@@ -137,7 +136,6 @@ public class FileEncoderWindow extends javax.swing.JFrame {
 
     private void jFileChooserMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jFileChooserMousePressed
         JFileChooser chooser = new JFileChooser();
-        // chooser.setFileFilter(new FileNameExtensionFilter("Arquivos de texto", "txt", "enc", "dec"));
         if (chooser.showOpenDialog(FileEncoderWindow.this) == JFileChooser.APPROVE_OPTION) {
             file = chooser.getSelectedFile();
             jFilePath.setText(file.getAbsolutePath());

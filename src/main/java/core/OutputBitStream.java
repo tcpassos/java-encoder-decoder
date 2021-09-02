@@ -1,7 +1,7 @@
 package core;
 
 import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.io.OutputStream;
 import java.security.InvalidParameterException;
 
 /**
@@ -12,11 +12,11 @@ public class OutputBitStream {
     private final int EMPTY_BYTE = 0b00000000;
     private final int FILLED_BYTE = 0b11111111;
     
-    private OutputStreamWriter writer;
+    private OutputStream writer;
     private int currentByte;
     private int offset;
     
-    public OutputBitStream(OutputStreamWriter writer) {
+    public OutputBitStream(OutputStream writer) {
         this.writer = writer;
         this.offset = 0;
     }

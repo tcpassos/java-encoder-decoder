@@ -1,7 +1,7 @@
 package core;
 
-import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.InvalidParameterException;
 
 /**
@@ -10,12 +10,12 @@ import java.security.InvalidParameterException;
 public class InputBitStream {
 
     private final int FILLED_BYTE = 0b11111111;
-    private BufferedReader reader;
+    private InputStream reader;
     private int currentByte;
     private int nextByte;
     private int remaining;
 
-    public InputBitStream(BufferedReader reader) {
+    public InputBitStream(InputStream reader) {
         this.reader = reader;
         this.remaining = 0;
     }

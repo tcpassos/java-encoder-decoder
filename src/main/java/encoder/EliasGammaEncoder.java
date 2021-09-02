@@ -2,14 +2,14 @@ package encoder;
 
 import core.InputBitStream;
 import core.OutputBitStream;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 public class EliasGammaEncoder implements Encoder {
 
     @Override
-    public void encode(BufferedReader reader, OutputStreamWriter writer) throws IOException {
+    public void encode(InputStream reader, OutputStream writer) throws IOException {
         OutputBitStream bstream = new OutputBitStream(writer);
         int symbol = reader.read();
         while (symbol != -1) {
@@ -24,7 +24,7 @@ public class EliasGammaEncoder implements Encoder {
     }
 
     @Override
-    public void decode(BufferedReader reader, OutputStreamWriter writer) throws IOException {
+    public void decode(InputStream reader, OutputStream writer) throws IOException {
         InputBitStream bstream = new InputBitStream(reader);
         while(bstream.hasNext()) {
             int n = (int) bstream.countWhile(false);
