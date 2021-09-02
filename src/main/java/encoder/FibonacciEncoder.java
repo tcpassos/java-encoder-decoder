@@ -25,7 +25,7 @@ public class FibonacciEncoder implements Encoder {
         int symbol = reader.read();
         while (symbol != -1) {
             symbol += 1;
-            _writeCodeward(symbol, bstream);
+            _writeCodeword(symbol, bstream);
             bstream.writeBit(true);
             symbol = reader.read();
         }
@@ -67,13 +67,13 @@ public class FibonacciEncoder implements Encoder {
         }
     }
     
-    private int _writeCodeward(int value, OutputBitStream bstream) throws IOException {
+    private int _writeCodeword(int value, OutputBitStream bstream) throws IOException {
         if (value == 0) return -1;
         Entry<Integer, Integer> entry = fibonacci.floorEntry(value);
         int valueToSubtract = entry.getKey();
         value -= valueToSubtract;
         int currentPosition = entry.getValue();
-        int lastPosition = _writeCodeward(value, bstream);
+        int lastPosition = _writeCodeword(value, bstream);
         bstream.writeBits(false, currentPosition - lastPosition - 1);
         bstream.writeBit(true);
         return currentPosition;

@@ -13,12 +13,12 @@ public class OutputBitStream {
     private final int FILLED_BYTE = 0b11111111;
     
     private OutputStream writer;
-    private int currentByte;
-    private int offset;
+    private int buffer;
+    private int allocatedInBuffer;
     
     public OutputBitStream(OutputStream writer) {
         this.writer = writer;
-        this.offset = 0;
+        this.allocatedInBuffer = 0;
     }
     
     /**
@@ -62,11 +62,11 @@ public class OutputBitStream {
     public void writeByte(int value, int size) throws IOException {
         if (size > Byte.SIZE) throw new InvalidParameterException();
         value = _applyLengthMask(value, size);
-        int shift = offset + size - Byte.SIZE;
-        currentByte = currentByte | _shift(value, shift);
-        offset += size;
+        int shift = allocatedInBuffer + size - Byte.SIZE;
+        buffer = buffer | _shift(value, shift);
+        allocatedInBuffer += size;
         if (_write()) {
-            currentByte = _shift(value, offset - Byte.SIZE);
+            buffer = _shift(value, allocatedInBuffer - Byte.SIZE);
         }    
     }
     
@@ -86,9 +86,9 @@ public class OutputBitStream {
      * @throws IOException
      */
     public void writeRemaining() throws IOException {
-        if (currentByte != EMPTY_BYTE) {
-            // System.out.print(String.format("%8s", Integer.toBinaryString(currentByte)).replace(' ', '0'));
-            writer.write(currentByte);
+        if (buffer != EMPTY_BYTE) {
+            // System.out.print(String.format("%8s", Integer.toBinaryString(buffer)).replace(' ', '0'));
+            writer.write(buffer);
         }
     }
     
@@ -125,13 +125,13 @@ public class OutputBitStream {
      * @throws IOException
      */
     private boolean _write() throws IOException {
-        if (offset < Byte.SIZE) {
+        if (allocatedInBuffer < Byte.SIZE) {
             return false;
         }
-        // System.out.print(String.format("%8s", Integer.toBinaryString(currentByte)).replace(' ', '0'));
-        writer.write(currentByte);
-        offset -= Byte.SIZE;
-        currentByte = EMPTY_BYTE;
+        // System.out.print(String.format("%8s", Integer.toBinaryString(buffer)).replace(' ', '0'));
+        writer.write(buffer);
+        allocatedInBuffer -= Byte.SIZE;
+        buffer = EMPTY_BYTE;
         return true;
     }
     

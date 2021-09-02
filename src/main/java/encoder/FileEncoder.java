@@ -45,6 +45,8 @@ public class FileEncoder {
                 return new FibonacciEncoder();
             case UNARY:
                 return new UnaryEncoder();
+            case DELTA:
+                return new DeltaEncoder();
             default:
                 throw new IllegalArgumentException();
         }

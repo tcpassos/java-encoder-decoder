@@ -7,7 +7,8 @@ public enum CodingType {
     GOLOMB("Golomb", 0),
     ELIAS_GAMMA("Elias-Gamma", 1),
     FIBONACCI("Fibonacci", 2),
-    UNARY("Unária", 3);
+    UNARY("Unária", 3),
+    DELTA("Delta", 4);
     
     private String name;
     private int header;
