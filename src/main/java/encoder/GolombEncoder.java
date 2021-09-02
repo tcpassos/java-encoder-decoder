@@ -23,7 +23,7 @@ public class GolombEncoder implements Encoder {
         while (symbol != -1) {
             bstream.writeBits(false, symbol / divider);
             bstream.writeBit(true); // Stop bit
-            bstream.writeByte((byte)(symbol % divider), binarySequenceSize);
+            bstream.writeByte(symbol % divider, binarySequenceSize);
             symbol = reader.read();
         }
         bstream.writeRemaining();

@@ -43,6 +43,8 @@ public class FileEncoder {
                 return new GolombEncoder(k);
             case ELIAS_GAMMA:
                 return new EliasGammaEncoder();
+            case FIBONACCI:
+                return new FibonacciEncoder();
             default:
                 throw new IllegalArgumentException();
         }

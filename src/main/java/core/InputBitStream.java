@@ -31,9 +31,9 @@ public class InputBitStream {
     public long countWhile(boolean value) throws IOException {
         long count = 0;
         while (hasNext()) {
-            if (value ^ _isNextBitSet()) break;
+            if (value ^ isNextBitSet()) break;
             count++;
-            next(1);
+            nextBit();
         }
         return count;
     }
@@ -56,6 +56,31 @@ public class InputBitStream {
         _shiftLeft(length);
         remaining -= length;
         return byteToReturn;
+    }
+    
+    /**
+     * Retorna o valor do proximo bit da stream
+     *
+     * @return {@code boolean}
+     * @throws IOException
+     */
+    public boolean nextBit() throws IOException {
+        return next(1) != 0;
+    }
+    
+    /**
+     * Indica se o proximo bit da stream esta setado como true
+     *
+     * @return {@code boolean}
+     * @throws IOException
+     */
+    public boolean isNextBitSet() throws IOException {
+        if (!hasNext()) {
+            return false;
+        }
+        int shift = remaining >= Byte.SIZE ? Byte.SIZE - 1 : remaining - 1;
+        int nextBit = currentByte >> shift;
+        return nextBit > 0;
     }
 
     /**
@@ -96,21 +121,6 @@ public class InputBitStream {
         currentByte = (currentByte << shift) & FILLED_BYTE;
         currentByte |= nextByte >> (Byte.SIZE - shift);
         nextByte = (nextByte << shift) & FILLED_BYTE;
-    }
-
-    /**
-     * Indica se o proximo bit da stream esta setado como true
-     *
-     * @return {@code boolean}
-     * @throws IOException
-     */
-    private boolean _isNextBitSet() throws IOException {
-        if (!hasNext()) {
-            return false;
-        }
-        int shift = remaining >= Byte.SIZE ? Byte.SIZE - 1 : remaining - 1;
-        int nextBit = currentByte >> shift;
-        return nextBit > 0;
     }
 
 }

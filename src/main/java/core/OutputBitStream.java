@@ -28,7 +28,7 @@ public class OutputBitStream {
      * @throws IOException
      */
     public void writeBit(boolean bit) throws IOException {
-        writeByte((byte)(bit ? 1 : 0), 1);
+        writeByte(bit ? 1 : 0, 1);
     }
     
     /**
@@ -48,7 +48,7 @@ public class OutputBitStream {
      * @param value Valor do byte
      * @throws IOException
      */
-    public void writeByte(byte value) throws IOException {
+    public void writeByte(int value) throws IOException {
         writeByte(value, Byte.SIZE);
     }
     
@@ -59,7 +59,7 @@ public class OutputBitStream {
      * @param size Tamanho do byte
      * @throws IOException 
      */
-    public void writeByte(byte value, int size) throws IOException {
+    public void writeByte(int value, int size) throws IOException {
         if (size > Byte.SIZE) throw new InvalidParameterException();
         value = _applyLengthMask(value, size);
         int shift = offset + size - Byte.SIZE;
@@ -96,9 +96,9 @@ public class OutputBitStream {
      * @param length Comprimento do byte
      * @return Byte apos a operacao
      */
-    private byte _applyLengthMask(byte value, int length) {
+    private int _applyLengthMask(int value, int length) {
         int mask = FILLED_BYTE & (FILLED_BYTE ^ (FILLED_BYTE << length));
-        return (byte) (value & mask);
+        return (value & mask);
     }
     
     /**
@@ -108,7 +108,7 @@ public class OutputBitStream {
      * @param shift Numero de bits para deslocamento
      * @return Byte deslocado
      */
-    private int _shift(byte value, int shift) {
+    private int _shift(int value, int shift) {
         if (shift > 0) {
             return value >> shift;
         }
@@ -125,6 +125,7 @@ public class OutputBitStream {
         if (offset < Byte.SIZE) {
             return false;
         }
+        // System.out.print(String.format("%8s", Integer.toBinaryString(currentByte)).replace(' ', '0'));
         writer.write(currentByte);
         offset -= Byte.SIZE;
         currentByte = EMPTY_BYTE;

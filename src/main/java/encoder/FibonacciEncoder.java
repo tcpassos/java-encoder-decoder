@@ -1,0 +1,82 @@
+package encoder;
+
+import core.InputBitStream;
+import core.OutputBitStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.util.Map.Entry;
+import java.util.TreeMap;
+import java.util.concurrent.atomic.AtomicInteger;
+
+public class FibonacciEncoder implements Encoder {
+    
+    private final int FILLED_BYTE = 0b11111111;
+    
+    private TreeMap<Integer, Integer> fibonacci;
+    
+    public FibonacciEncoder() {
+        _loadFibonacciSequence();
+    }
+
+    @Override
+    public void encode(BufferedReader reader, OutputStreamWriter writer) throws IOException {
+        OutputBitStream bstream = new OutputBitStream(writer);
+        int symbol = reader.read();
+        while (symbol != -1) {
+            symbol += 1;
+            _writeCodeward(symbol, bstream);
+            bstream.writeBit(true);
+            symbol = reader.read();
+        }
+        bstream.writeRemaining();
+    }
+
+    @Override
+    public void decode(BufferedReader reader, OutputStreamWriter writer) throws IOException {
+        InputBitStream bstream = new InputBitStream(reader);
+        int index = 0;
+        int symbol = 0;
+        while(bstream.hasNext()) {
+            index += bstream.countWhile(false);
+            bstream.nextBit();
+            // Evita a escrita de lixo no final do arquivo
+            if (!bstream.hasNext()) break;
+            symbol += fibonacci.keySet().toArray(new Integer[0])[index];
+            index++;
+            if (bstream.isNextBitSet()) {
+                bstream.nextBit(); // Stop bit
+                writer.write(symbol - 1);
+                index = 0;
+                symbol = 0;
+            }
+        }
+    }
+    
+    private void _loadFibonacciSequence() {
+        fibonacci = new TreeMap<>();
+        int previous;
+        int current = 1;
+        int next = 1;
+        AtomicInteger count = new AtomicInteger();
+        while(current <= FILLED_BYTE) {
+            previous = current;
+            current = next;
+            fibonacci.put(current, count.getAndIncrement());
+            next = previous + current;
+        }
+    }
+    
+    private int _writeCodeward(int value, OutputBitStream bstream) throws IOException {
+        if (value == 0) return -1;
+        Entry<Integer, Integer> entry = fibonacci.floorEntry(value);
+        int valueToSubtract = entry.getKey();
+        value -= valueToSubtract;
+        int currentPosition = entry.getValue();
+        int lastPosition = _writeCodeward(value, bstream);
+        bstream.writeBits(false, currentPosition - lastPosition - 1);
+        bstream.writeBit(true);
+        return currentPosition;
+    }
+    
+}

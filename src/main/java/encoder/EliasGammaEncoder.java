@@ -17,7 +17,7 @@ public class EliasGammaEncoder implements Encoder {
             int n = (int) (Math.log(symbol) / Math.log(2));
             bstream.writeBits(false, n);
             bstream.writeBit(true); // Stop bit
-            bstream.writeByte((byte)(symbol - Math.pow(2, n)), n);
+            bstream.writeByte((int) (symbol - Math.pow(2, n)), n);
             symbol = reader.read();
         }
         bstream.writeRemaining();
