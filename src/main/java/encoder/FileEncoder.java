@@ -21,7 +21,7 @@ public class FileEncoder {
         }
         return outputFileName;
     }
-    
+
     public void decode(String inputFileName) {
         String outputFileName = inputFileName.concat(".dec");
         try(InputStream reader = new FileInputStream(inputFileName);

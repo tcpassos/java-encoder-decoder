@@ -12,18 +12,18 @@ import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class FibonacciEncoder implements Encoder {
-    
+
     private final int FILLED_BYTE = 0b11111111;
-    
+
     private TreeMap<Integer, Integer> fibonacci;
-    
+
     public FibonacciEncoder() {
         _loadFibonacciSequence();
     }
 
     @Override
     public void encode(InputStream reader, OutputStream writer) throws IOException {
-        FileEncoderUtils.writeHeader(writer, CodingType.FIBONACCI);
+        FileEncoderUtils.writeHeader(writer, CodingType.FIBONACCI, 0);
         OutputBitStream bstream = new OutputBitStream(writer);
         int symbol = reader.read();
         while (symbol != -1) {
@@ -55,7 +55,7 @@ public class FibonacciEncoder implements Encoder {
             }
         }
     }
-    
+
     private void _loadFibonacciSequence() {
         fibonacci = new TreeMap<>();
         int previous;
@@ -69,7 +69,7 @@ public class FibonacciEncoder implements Encoder {
             next = previous + current;
         }
     }
-    
+
     private int _writeCodeword(int value, OutputBitStream bstream) throws IOException {
         if (value == 0) return -1;
         Entry<Integer, Integer> entry = fibonacci.floorEntry(value);
@@ -81,5 +81,5 @@ public class FibonacciEncoder implements Encoder {
         bstream.writeBit(true);
         return currentPosition;
     }
-    
+
 }

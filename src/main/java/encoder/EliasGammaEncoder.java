@@ -12,7 +12,7 @@ public class EliasGammaEncoder implements Encoder {
 
     @Override
     public void encode(InputStream reader, OutputStream writer) throws IOException {
-        FileEncoderUtils.writeHeader(writer, CodingType.ELIAS_GAMMA);
+        FileEncoderUtils.writeHeader(writer, CodingType.ELIAS_GAMMA, 0);
         OutputBitStream bstream = new OutputBitStream(writer);
         int symbol = reader.read();
         while (symbol != -1) {
@@ -39,5 +39,5 @@ public class EliasGammaEncoder implements Encoder {
             writer.write(symbol);
         }
     }
-    
+
 }

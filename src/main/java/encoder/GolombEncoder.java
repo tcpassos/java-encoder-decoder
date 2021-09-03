@@ -10,9 +10,9 @@ import java.io.OutputStream;
 
 public class GolombEncoder implements Encoder {
     
-    private int divider;
-    private int binarySequenceSize;
-    
+    private final int divider;
+    private final int binarySequenceSize;
+
     public GolombEncoder(int divider) {
         this.divider = divider;
         binarySequenceSize = (int) (Math.log(divider) / Math.log(2));
@@ -31,7 +31,7 @@ public class GolombEncoder implements Encoder {
         }
         bstream.flush();
     }
-    
+
     @Override
     public void decode(InputStream reader, OutputStream writer) throws IOException {
         InputBitStream bstream = new InputBitStream(reader);

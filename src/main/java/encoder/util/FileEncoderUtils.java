@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 public class FileEncoderUtils {
-    
+
     public static Encoder getEncoder(CodingType coding, int param) {
         switch (coding) {
             case GOLOMB:
@@ -28,14 +28,14 @@ public class FileEncoderUtils {
                 throw new IllegalArgumentException();
         }
     }
-    
-    public static void writeHeader(OutputStream writer, CodingType coding) throws IOException {
-        writeHeader(writer, coding, 0);
+
+    public static void writeHeader(OutputStream writer, int ... params) throws IOException {
+        for(int param: params) writer.write(param);
     }
 
-    public static void writeHeader(OutputStream writer, CodingType coding, int param) throws IOException {
+    public static void writeHeader(OutputStream writer, CodingType coding, int ... params) throws IOException {
         writer.write(coding.getHeader());
-        writer.write(param);
+        for(int param: params) writer.write(param);
     }
-    
+
 }

@@ -37,6 +37,8 @@
                       <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="jDividerField" min="-2" pref="50" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="jGenerateHammingField" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
                       <Component id="jFileChooser" min="-2" pref="121" max="-2" attributes="0"/>
@@ -45,7 +47,7 @@
                   </Group>
                   <Component id="jDecodeButton" alignment="0" min="-2" pref="121" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="129" max="32767" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -65,6 +67,7 @@
                   <Component id="jDividerField" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jEncodeButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jGenerateHammingField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jDecodeButton" min="-2" max="-2" attributes="0"/>
@@ -137,6 +140,11 @@
       <Events>
         <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jDecodeButtonMousePressed"/>
       </Events>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="jGenerateHammingField">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Tratamento de ru&#xed;do"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>

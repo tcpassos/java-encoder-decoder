@@ -12,7 +12,7 @@ public class UnaryEncoder implements Encoder {
 
     @Override
     public void encode(InputStream reader, OutputStream writer) throws IOException {
-        FileEncoderUtils.writeHeader(writer, CodingType.UNARY);
+        FileEncoderUtils.writeHeader(writer, CodingType.UNARY, 0);
         OutputBitStream bstream = new OutputBitStream(writer);
         int symbol = reader.read();
         while (symbol != -1) {
@@ -33,5 +33,5 @@ public class UnaryEncoder implements Encoder {
             writer.write(symbol);
         }
     }
-    
+
 }

@@ -44,6 +44,7 @@ public class FileEncoderWindow extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
         jFilePath = new javax.swing.JLabel();
         jDecodeButton = new javax.swing.JButton();
+        jGenerateHammingField = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Codificador/Decodificador");
@@ -87,6 +88,8 @@ public class FileEncoderWindow extends javax.swing.JFrame {
             }
         });
 
+        jGenerateHammingField.setText("Tratamento de ruído");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -102,13 +105,15 @@ public class FileEncoderWindow extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jDividerField, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jDividerField, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jGenerateHammingField))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jFileChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jFilePath))
                     .addComponent(jDecodeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(129, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -124,7 +129,8 @@ public class FileEncoderWindow extends javax.swing.JFrame {
                     .addComponent(jCodingTypeField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jDividerField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
-                    .addComponent(jEncodeButton))
+                    .addComponent(jEncodeButton)
+                    .addComponent(jGenerateHammingField))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jDecodeButton)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -183,7 +189,7 @@ public class FileEncoderWindow extends javax.swing.JFrame {
                 .toArray(size -> new String[size]);
         return new DefaultComboBoxModel(options);
     }
-    
+
     /**
      * @param args the command line arguments
      */
@@ -201,7 +207,7 @@ public class FileEncoderWindow extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(FileEncoderWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        
+
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
             new FileEncoderWindow().setVisible(true);
@@ -215,6 +221,7 @@ public class FileEncoderWindow extends javax.swing.JFrame {
     private javax.swing.JButton jEncodeButton;
     private javax.swing.JButton jFileChooser;
     private javax.swing.JLabel jFilePath;
+    private javax.swing.JCheckBox jGenerateHammingField;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JSeparator jSeparator1;
     // End of variables declaration//GEN-END:variables
