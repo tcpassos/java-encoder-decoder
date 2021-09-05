@@ -1,6 +1,6 @@
-package encoder.util;
+package encoder.file;
 
-import bean.CodingType;
+import encoder.bean.CodingType;
 import encoder.DeltaEncoder;
 import encoder.EliasGammaEncoder;
 import encoder.Encoder;

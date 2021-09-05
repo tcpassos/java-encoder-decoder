@@ -1,4 +1,4 @@
-package encoder.util;
+package errorcorrecting.hamming;
 
 public class HammingUtils {
 

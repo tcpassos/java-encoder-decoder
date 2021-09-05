@@ -1,9 +1,10 @@
 package encoder;
 
-import bean.CodingType;
-import core.InputBitStream;
-import core.OutputBitStream;
-import encoder.util.FileEncoderUtils;
+import encoder.bean.CodingType;
+import core.util.BitUtils;
+import core.bitstream.InputBitStream;
+import core.bitstream.OutputBitStream;
+import encoder.file.FileEncoderUtils;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -80,7 +81,7 @@ public class DeltaEncoder implements Encoder {
     private InputStream _loadLengthAndgetStream(InputStream reader) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         int biggestDelta = 0;
-        int current = _readByteIntoByteArray(reader, baos);
+        int current = _readByteIntoByteStream(reader, baos);
         int previous = current;
         while (current != -1) {
             int currentDelta = current == previous ? 0 : Math.abs(current - previous) - 1;
@@ -88,9 +89,9 @@ public class DeltaEncoder implements Encoder {
                 biggestDelta = currentDelta;
             }
             previous = current;
-            current = _readByteIntoByteArray(reader, baos);
+            current = _readByteIntoByteStream(reader, baos);
         }
-        suffixLength = (int)(Math.log(biggestDelta) / Math.log(2)) + 1;
+        suffixLength = BitUtils.bitSetLength(biggestDelta);
         return new ByteArrayInputStream(baos.toByteArray());
     }
     
@@ -98,7 +99,7 @@ public class DeltaEncoder implements Encoder {
         bstream.writeByte(instruction, 2);
     }
     
-    private int _readByteIntoByteArray(InputStream reader, ByteArrayOutputStream baos) throws IOException {
+    private int _readByteIntoByteStream(InputStream reader, ByteArrayOutputStream baos) throws IOException {
         int symbol = reader.read();
         if (symbol != -1) {
             baos.write(symbol);

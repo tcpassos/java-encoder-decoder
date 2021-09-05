@@ -1,9 +1,9 @@
 package encoder;
 
-import bean.CodingType;
-import core.OutputBitStream;
-import core.InputBitStream;
-import encoder.util.FileEncoderUtils;
+import encoder.bean.CodingType;
+import core.bitstream.OutputBitStream;
+import core.bitstream.InputBitStream;
+import encoder.file.FileEncoderUtils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -15,7 +15,7 @@ public class GolombEncoder implements Encoder {
 
     public GolombEncoder(int divider) {
         this.divider = divider;
-        binarySequenceSize = (int) (Math.log(divider) / Math.log(2));
+        binarySequenceSize = (int) (Math.log10(divider) / Math.log10(2));
     }
 
     @Override

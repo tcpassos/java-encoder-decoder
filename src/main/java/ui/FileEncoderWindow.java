@@ -1,7 +1,8 @@
 package ui;
 
-import bean.CodingType;
-import encoder.FileEncoder;
+import core.util.FileUtils;
+import encoder.bean.CodingType;
+import encoder.file.FileEncoder;
 import java.io.File;
 import java.text.ParseException;
 import java.util.Arrays;
@@ -44,7 +45,8 @@ public class FileEncoderWindow extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
         jFilePath = new javax.swing.JLabel();
         jDecodeButton = new javax.swing.JButton();
-        jGenerateHammingField = new javax.swing.JCheckBox();
+        jGenerateEccButton = new javax.swing.JButton();
+        jExtractEccButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Codificador/Decodificador");
@@ -88,7 +90,21 @@ public class FileEncoderWindow extends javax.swing.JFrame {
             }
         });
 
-        jGenerateHammingField.setText("Tratamento de ruído");
+        jGenerateEccButton.setText("Gerar arquivo ECC");
+        jGenerateEccButton.setEnabled(false);
+        jGenerateEccButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jGenerateEccButtonMouseClicked(evt);
+            }
+        });
+
+        jExtractEccButton.setText("Extrair arquivo ECC");
+        jExtractEccButton.setEnabled(false);
+        jExtractEccButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jExtractEccButtonMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -99,21 +115,27 @@ public class FileEncoderWindow extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jEncodeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jDecodeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jCodingTypeField, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jDividerField, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jGenerateHammingField))
+                        .addComponent(jGenerateEccButton, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jExtractEccButton)
+                        .addGap(33, 33, 33))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jFileChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jFilePath))
-                    .addComponent(jDecodeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jFileChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jFilePath))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jEncodeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jCodingTypeField, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jDividerField, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -129,10 +151,12 @@ public class FileEncoderWindow extends javax.swing.JFrame {
                     .addComponent(jCodingTypeField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jDividerField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
-                    .addComponent(jEncodeButton)
-                    .addComponent(jGenerateHammingField))
+                    .addComponent(jEncodeButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jDecodeButton)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jDecodeButton)
+                    .addComponent(jGenerateEccButton)
+                    .addComponent(jExtractEccButton))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -149,25 +173,36 @@ public class FileEncoderWindow extends javax.swing.JFrame {
             jEncodeButton.setEnabled(true);
             jCodingTypeField.setEnabled(true);
             _enableDisableDividerField();
-            jDecodeButton.setEnabled(true);
+            jDecodeButton.setEnabled(FileUtils.checkExtensionName(file, "enc"));
+            jGenerateEccButton.setEnabled(FileUtils.checkExtensionName(file, "enc"));
+            jExtractEccButton.setEnabled(FileUtils.checkExtensionName(file, "ecc"));
         }
     }//GEN-LAST:event_jFileChooserMousePressed
-
+    
     private void jEncodeButtonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jEncodeButtonMousePressed
         CodingType coding = CodingType.findByName((String) jCodingTypeField.getSelectedItem());
-        String output = fileEncoder.encode(file.getAbsolutePath(), coding, _getDivider());
-        File outputFile = new File(output);
-        JOptionPane.showMessageDialog(null, "O arquivo " + file.getName() + " passou de " + file.length() + " bytes para " + outputFile.length() + " bytes");
+        File output = fileEncoder.encode(file, coding, _getDivider());
+        JOptionPane.showMessageDialog(null, "O arquivo " + file.getName() + " passou de " + file.length() + " bytes para " + output.length() + " bytes");
     }//GEN-LAST:event_jEncodeButtonMousePressed
 
     private void jDecodeButtonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jDecodeButtonMousePressed
-        fileEncoder.decode(file.getAbsolutePath());
+        fileEncoder.decode(file);
         JOptionPane.showMessageDialog(null, "O arquivo " + file.getName() + " foi decodificado com sucesso!");
     }//GEN-LAST:event_jDecodeButtonMousePressed
 
     private void jCodingTypeFieldPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jCodingTypeFieldPropertyChange
         _enableDisableDividerField();
     }//GEN-LAST:event_jCodingTypeFieldPropertyChange
+
+    private void jGenerateEccButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jGenerateEccButtonMouseClicked
+        File output = fileEncoder.generateEcc(file);
+        JOptionPane.showMessageDialog(null, "O arquivo " + output.getName() + " foi gerado!");
+    }//GEN-LAST:event_jGenerateEccButtonMouseClicked
+
+    private void jExtractEccButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jExtractEccButtonMouseClicked
+        File output = fileEncoder.extractEcc(file);
+        JOptionPane.showMessageDialog(null, "O arquivo " + output.getName() + " foi gerado!");
+    }//GEN-LAST:event_jExtractEccButtonMouseClicked
 
     private void _enableDisableDividerField() {
         boolean isEnabled = Objects.nonNull(file) && "Golomb".equals((String) jCodingTypeField.getSelectedItem());
@@ -219,9 +254,10 @@ public class FileEncoderWindow extends javax.swing.JFrame {
     private javax.swing.JButton jDecodeButton;
     private javax.swing.JSpinner jDividerField;
     private javax.swing.JButton jEncodeButton;
+    private javax.swing.JButton jExtractEccButton;
     private javax.swing.JButton jFileChooser;
     private javax.swing.JLabel jFilePath;
-    private javax.swing.JCheckBox jGenerateHammingField;
+    private javax.swing.JButton jGenerateEccButton;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JSeparator jSeparator1;
     // End of variables declaration//GEN-END:variables

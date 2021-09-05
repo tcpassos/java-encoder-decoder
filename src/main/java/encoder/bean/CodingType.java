@@ -1,4 +1,4 @@
-package bean;
+package encoder.bean;
 
 import java.util.Arrays;
 

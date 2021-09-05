@@ -1,9 +1,9 @@
 package encoder;
 
-import bean.CodingType;
-import core.InputBitStream;
-import core.OutputBitStream;
-import encoder.util.FileEncoderUtils;
+import encoder.bean.CodingType;
+import core.bitstream.InputBitStream;
+import core.bitstream.OutputBitStream;
+import encoder.file.FileEncoderUtils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
