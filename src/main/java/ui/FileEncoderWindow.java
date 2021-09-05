@@ -67,16 +67,16 @@ public class FileEncoderWindow extends javax.swing.JFrame {
 
         jEncodeButton.setText("Codificar");
         jEncodeButton.setEnabled(false);
-        jEncodeButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                jEncodeButtonMousePressed(evt);
+        jEncodeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jEncodeButtonActionPerformed(evt);
             }
         });
 
         jFileChooser.setText("Selecionar arquivo");
-        jFileChooser.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                jFileChooserMousePressed(evt);
+        jFileChooser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jFileChooserActionPerformed(evt);
             }
         });
 
@@ -84,25 +84,25 @@ public class FileEncoderWindow extends javax.swing.JFrame {
 
         jDecodeButton.setText("Decodificar");
         jDecodeButton.setEnabled(false);
-        jDecodeButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                jDecodeButtonMousePressed(evt);
+        jDecodeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jDecodeButtonActionPerformed(evt);
             }
         });
 
         jGenerateEccButton.setText("Gerar arquivo ECC");
         jGenerateEccButton.setEnabled(false);
-        jGenerateEccButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jGenerateEccButtonMouseClicked(evt);
+        jGenerateEccButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jGenerateEccButtonActionPerformed(evt);
             }
         });
 
         jExtractEccButton.setText("Extrair arquivo ECC");
         jExtractEccButton.setEnabled(false);
-        jExtractEccButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jExtractEccButtonMouseClicked(evt);
+        jExtractEccButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jExtractEccButtonActionPerformed(evt);
             }
         });
 
@@ -165,8 +165,12 @@ public class FileEncoderWindow extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    
+    private void jCodingTypeFieldPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jCodingTypeFieldPropertyChange
+        _enableDisableDividerField();
+    }//GEN-LAST:event_jCodingTypeFieldPropertyChange
 
-    private void jFileChooserMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jFileChooserMousePressed
+    private void jFileChooserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFileChooserActionPerformed
         if (fileChooser.showOpenDialog(FileEncoderWindow.this) == JFileChooser.APPROVE_OPTION) {
             file = fileChooser.getSelectedFile();
             jFilePath.setText(file.getAbsolutePath());
@@ -177,32 +181,28 @@ public class FileEncoderWindow extends javax.swing.JFrame {
             jGenerateEccButton.setEnabled(FileUtils.checkExtensionName(file, "enc"));
             jExtractEccButton.setEnabled(FileUtils.checkExtensionName(file, "ecc"));
         }
-    }//GEN-LAST:event_jFileChooserMousePressed
-    
-    private void jEncodeButtonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jEncodeButtonMousePressed
+    }//GEN-LAST:event_jFileChooserActionPerformed
+
+    private void jEncodeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jEncodeButtonActionPerformed
         CodingType coding = CodingType.findByName((String) jCodingTypeField.getSelectedItem());
         File output = fileEncoder.encode(file, coding, _getDivider());
         JOptionPane.showMessageDialog(null, "O arquivo " + file.getName() + " passou de " + file.length() + " bytes para " + output.length() + " bytes");
-    }//GEN-LAST:event_jEncodeButtonMousePressed
+    }//GEN-LAST:event_jEncodeButtonActionPerformed
 
-    private void jDecodeButtonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jDecodeButtonMousePressed
+    private void jDecodeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jDecodeButtonActionPerformed
         fileEncoder.decode(file);
         JOptionPane.showMessageDialog(null, "O arquivo " + file.getName() + " foi decodificado com sucesso!");
-    }//GEN-LAST:event_jDecodeButtonMousePressed
+    }//GEN-LAST:event_jDecodeButtonActionPerformed
 
-    private void jCodingTypeFieldPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jCodingTypeFieldPropertyChange
-        _enableDisableDividerField();
-    }//GEN-LAST:event_jCodingTypeFieldPropertyChange
-
-    private void jGenerateEccButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jGenerateEccButtonMouseClicked
+    private void jGenerateEccButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jGenerateEccButtonActionPerformed
         File output = fileEncoder.generateEcc(file);
         JOptionPane.showMessageDialog(null, "O arquivo " + output.getName() + " foi gerado!");
-    }//GEN-LAST:event_jGenerateEccButtonMouseClicked
+    }//GEN-LAST:event_jGenerateEccButtonActionPerformed
 
-    private void jExtractEccButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jExtractEccButtonMouseClicked
+    private void jExtractEccButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jExtractEccButtonActionPerformed
         File output = fileEncoder.extractEcc(file);
         JOptionPane.showMessageDialog(null, "O arquivo " + output.getName() + " foi gerado!");
-    }//GEN-LAST:event_jExtractEccButtonMouseClicked
+    }//GEN-LAST:event_jExtractEccButtonActionPerformed
 
     private void _enableDisableDividerField() {
         boolean isEnabled = Objects.nonNull(file) && "Golomb".equals((String) jCodingTypeField.getSelectedItem());
