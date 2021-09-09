@@ -13,19 +13,20 @@ import java.io.OutputStream;
 
 public class FileEncoder {
 
-    public File encode(File inputFile, CodingType coding, int k) {
+    public File encode(File inputFile, CodingType coding, int k) throws IOException {
         File outputFile = FileUtils.appendExtension(inputFile, "enc");
         try(InputStream reader = new FileInputStream(inputFile);
             OutputStream writer = new FileOutputStream(outputFile)) {
             Encoder encoder = FileEncoderUtils.getEncoder(coding, k);
             encoder.encode(reader, writer);
         } catch (IOException ex) {
-            System.exit(1);
+            FileEncoderLogger.getLogger().severe(ex.getMessage());
+            throw new IOException(ex);
         }
         return outputFile;
     }
 
-    public void decode(File inputFile) {
+    public void decode(File inputFile) throws IOException {
         File outputFile = FileUtils.changeExtension(inputFile, "dec");
         try(InputStream reader = new FileInputStream(inputFile);
             OutputStream writer = new FileOutputStream(outputFile)) {
@@ -34,30 +35,33 @@ public class FileEncoder {
             Encoder encoder = FileEncoderUtils.getEncoder(CodingType.findByHeader(coding), k);
             encoder.decode(reader, writer);
         } catch (IOException ex) {
-            System.exit(1);
+            FileEncoderLogger.getLogger().severe(ex.getMessage());
+            throw new IOException(ex);
         }
     }
     
-    public File generateEcc(File inputFile) {
+    public File generateEcc(File inputFile) throws IOException {
         File outputFile = FileUtils.appendExtension(inputFile, "ecc");
         try(InputStream reader = new FileInputStream(inputFile);
             OutputStream writer = new FileOutputStream(outputFile)) {
             Encoder encoder = new HammingEncoder();
             encoder.encode(reader, writer);
         } catch (IOException ex) {
-            System.exit(1);
+            FileEncoderLogger.getLogger().severe(ex.getMessage());
+            throw new IOException(ex);
         }
         return outputFile;
     }
     
-    public File extractEcc(File inputFile) {
+    public File extractEcc(File inputFile) throws IOException {
         File outputFile = FileUtils.removeExtension(inputFile);
         try(InputStream reader = new FileInputStream(inputFile.getAbsolutePath());
             OutputStream writer = new FileOutputStream(outputFile)) {
             Encoder encoder = new HammingEncoder();
             encoder.decode(reader, writer);
         } catch (IOException ex) {
-            System.exit(1);
+            FileEncoderLogger.getLogger().severe(ex.getMessage());
+            throw new IOException(ex);
         }
         return outputFile;
     }

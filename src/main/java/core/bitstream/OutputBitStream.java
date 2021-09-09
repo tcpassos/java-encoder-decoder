@@ -87,7 +87,6 @@ public class OutputBitStream {
      */
     public void flush() throws IOException {
         if (buffer != EMPTY_BYTE) {
-            // System.out.print(String.format("%8s", Integer.toBinaryString(buffer)).replace(' ', '0'));
             writer.write(buffer);
         }
     }
@@ -128,7 +127,6 @@ public class OutputBitStream {
         if (allocatedInBuffer < Byte.SIZE) {
             return false;
         }
-        // System.out.print(String.format("%8s", Integer.toBinaryString(buffer)).replace(' ', '0'));
         writer.write(buffer);
         allocatedInBuffer -= Byte.SIZE;
         buffer = EMPTY_BYTE;

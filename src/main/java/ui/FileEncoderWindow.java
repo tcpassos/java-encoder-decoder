@@ -4,6 +4,7 @@ import core.util.FileUtils;
 import encoder.bean.CodingType;
 import encoder.file.FileEncoder;
 import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Objects;
@@ -185,23 +186,40 @@ public class FileEncoderWindow extends javax.swing.JFrame {
 
     private void jEncodeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jEncodeButtonActionPerformed
         CodingType coding = CodingType.findByName((String) jCodingTypeField.getSelectedItem());
-        File output = fileEncoder.encode(file, coding, _getDivider());
-        JOptionPane.showMessageDialog(null, "O arquivo " + file.getName() + " passou de " + file.length() + " bytes para " + output.length() + " bytes");
+        File output;
+        try {
+            output = fileEncoder.encode(file, coding, _getDivider());
+            JOptionPane.showMessageDialog(null, "O arquivo " + file.getName() + " passou de " + file.length() + " bytes para " + output.length() + " bytes");
+        } catch (IOException ex) {
+            handleError();
+        }
     }//GEN-LAST:event_jEncodeButtonActionPerformed
 
     private void jDecodeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jDecodeButtonActionPerformed
-        fileEncoder.decode(file);
-        JOptionPane.showMessageDialog(null, "O arquivo " + file.getName() + " foi decodificado com sucesso!");
+        try {
+            fileEncoder.decode(file);
+            JOptionPane.showMessageDialog(null, "O arquivo " + file.getName() + " foi decodificado com sucesso!");
+        } catch (IOException ex) {
+            handleError();
+        }
     }//GEN-LAST:event_jDecodeButtonActionPerformed
 
     private void jGenerateEccButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jGenerateEccButtonActionPerformed
-        File output = fileEncoder.generateEcc(file);
-        JOptionPane.showMessageDialog(null, "O arquivo " + output.getName() + " foi gerado!");
+        try {
+            File output = fileEncoder.generateEcc(file);
+            JOptionPane.showMessageDialog(null, "O arquivo " + output.getName() + " foi gerado!");
+        } catch (IOException ex) {
+            handleError();
+        }
     }//GEN-LAST:event_jGenerateEccButtonActionPerformed
 
     private void jExtractEccButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jExtractEccButtonActionPerformed
-        File output = fileEncoder.extractEcc(file);
-        JOptionPane.showMessageDialog(null, "O arquivo " + output.getName() + " foi gerado!");
+        try {
+            File output = fileEncoder.extractEcc(file);
+            JOptionPane.showMessageDialog(null, "O arquivo " + output.getName() + " foi gerado!");
+        } catch (IOException ex) {
+            handleError();
+        }
     }//GEN-LAST:event_jExtractEccButtonActionPerformed
 
     private void _enableDisableDividerField() {
@@ -223,6 +241,14 @@ public class FileEncoderWindow extends javax.swing.JFrame {
                 .map(coding -> coding.getName())
                 .toArray(size -> new String[size]);
         return new DefaultComboBoxModel(options);
+    }
+    
+    private void handleError() {
+        JOptionPane.showMessageDialog(
+                null,
+                "Houve um erro durante o processamento\nVerifique o arquivo de log para mais informações",
+                "Erro", JOptionPane.ERROR_MESSAGE
+        );
     }
 
     /**
