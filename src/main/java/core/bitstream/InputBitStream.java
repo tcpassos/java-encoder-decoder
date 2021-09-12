@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.security.InvalidParameterException;
 
 /**
- * Classe com metodos para leitura de uma stream de bits
+ * Classe com metodos para leitura de uma stream de bits.
  */
 public class InputBitStream {
 
