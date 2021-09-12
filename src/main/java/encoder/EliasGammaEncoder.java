@@ -31,9 +31,9 @@ public class EliasGammaEncoder implements Encoder {
         InputBitStream bstream = new InputBitStream(reader);
         while(bstream.hasNext()) {
             int n = (int) bstream.countWhile(false);
+            bstream.next(1); // Stop bit
             // Evita a escrita de lixo no final do arquivo
             if (!bstream.hasNext()) break;
-            bstream.next(1); // Stop bit
             int suffix = bstream.next(n);
             int symbol = (int) Math.pow(2, n) + suffix - 1;
             writer.write(symbol);
