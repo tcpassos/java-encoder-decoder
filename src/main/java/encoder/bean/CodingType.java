@@ -2,6 +2,9 @@ package encoder.bean;
 
 import java.util.Arrays;
 
+/**
+ * Tipos de codificacao disponiveis.
+ */
 public enum CodingType {
     
     GOLOMB("Golomb", 0),
@@ -10,7 +13,9 @@ public enum CodingType {
     UNARY("Unária", 3),
     DELTA("Delta", 4);
     
+    /* Descricao da codificacao */
     private String name;
+    /* Numero inteiro colocado no cabecalho do arquivo codificado */
     private int header;
     
     private CodingType(String name, int header) {

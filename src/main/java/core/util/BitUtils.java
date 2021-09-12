@@ -29,19 +29,4 @@ public class BitUtils {
         return data | (1 << index);
     }
     
-    /**
-     * Converte um inteiro em um array de inteiros que podem assumir o valor de um ou zero
-     * Exemplo: 3 => [1, 0, 1]
-     * 
-     * @param bitset Valor a ser convertido
-     * @return {@code int[]}
-     */
-    public static int[] toBitArray(int bitset) {
-        int[] bitArray = new int[bitSetLength(bitset)];
-        for (int i=0; i<bitArray.length; i++) {
-            bitArray[i] = (bitset >> (bitArray.length - i - 1)) & 1;
-        }
-        return bitArray;
-    }
-    
 }

@@ -2,10 +2,19 @@ package errorcorrecting.hamming;
 
 import core.util.BitUtils;
 
+/**
+ * Classe responsavel pelo tratamento de erro Hamming.
+ */
 public class HammingUtils {
 
+    /**
+     * Retorna o codeword Hamming de 7 bits a partir de um simbolo de 4 bits
+     *
+     * @param symbol Simbolo a ser processado
+     * @return {@code int}
+     */
     public static int getCodeword(int symbol) {
-        // r1 r2 m1 r4 m2 m3 m4
+        // Sequencia codificada: r1 r2 m1 r4 m2 m3 m4
         int r1 = getFirstBitHamming(symbol) << 6;
         int r2 = getSecondBitHamming(symbol) << 5;
         int r4 = getThirdBitHamming(symbol) << 3;
@@ -14,6 +23,12 @@ public class HammingUtils {
         return r1 | r2 | r4 | m1 | m234;
     }
 
+    /**
+     * Retorna o simbolo decodificado de um codeword Hamming
+     *
+     * @param codeword Codeword Hamming
+     * @return {@code int}
+     */
     public static int parseCodeword(int codeword) {
         int m1 = (codeword >> 1) & 0b1000;
         int m234 = codeword & 0b0111;
@@ -21,6 +36,12 @@ public class HammingUtils {
         return symbol;
     }
 
+    /**
+     * Retorna o simbolo decodificado de um codeword Hamming corrigindo os bits inconsistentes
+     *
+     * @param codeword Codeword Hamming
+     * @return {@code int}
+     */
     public static int parseAndCorrectCodeword(int codeword) {
         int symbol = parseCodeword(codeword);
         int r1Check = ((codeword >> 6) & 1) ^ getFirstBitHamming(symbol);
