@@ -18,15 +18,15 @@ public class BitUtils {
     }
     
     /**
-     * Define o valor de um bit especificado como 1
+     * Muda o estado de um bit na posicao especificada
      *
      * @param data Valor original
-     * @param index Index do bit a ser setado
+     * @param index Index do bit a ser alterado
      * @return {@code int}
      */
-    public static int setBit(int data, int index) {
+    public static int toggleBit(int data, int index) {
         if (index < 0 || index > (Integer.SIZE - 1)) throw new IllegalArgumentException();
-        return data | (1 << index);
+        return data ^ (1 << index);
     }
     
 }

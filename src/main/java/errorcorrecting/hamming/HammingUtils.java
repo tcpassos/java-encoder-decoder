@@ -56,27 +56,31 @@ public class HammingUtils {
         //  3  2  1  0 <= posicao
         switch (hammingCheck) {
             case 0b101: // r1, r4 = m1
-                symbol = BitUtils.setBit(symbol, 3);
+                symbol = BitUtils.toggleBit(symbol, 3);
+                break;
             case 0b111: // r1, r2, r4 = m2
-                symbol = BitUtils.setBit(symbol, 2);
+                symbol = BitUtils.toggleBit(symbol, 2);
+                break;
             case 0b110: // r1, r2 = m3
-                symbol = BitUtils.setBit(symbol, 1);
+                symbol = BitUtils.toggleBit(symbol, 1);
+                break;
             case 0b011: // r2, r4 = m4
-                symbol = BitUtils.setBit(symbol, 0);
+                symbol = BitUtils.toggleBit(symbol, 0);
+                break;
         }
         return symbol;
     }
 
     private static int getFirstBitHamming(int b) {
-        return (b ^ 0b1101) % 2 == 0 ? 0 : 1;
+        return Integer.bitCount(b & 0b1110) % 2 == 0 ? 0 : 1;
     }
 
     private static int getSecondBitHamming(int b) {
-        return (b ^ 0b0111) % 2 == 0 ? 0 : 1;
+        return Integer.bitCount(b & 0b0111) % 2 == 0 ? 0 : 1;
     }
 
     private static int getThirdBitHamming(int b) {
-        return (b ^ 0b1101) % 2 == 0 ? 0 : 1;
+        return Integer.bitCount(b & 0b1101) % 2 == 0 ? 0 : 1;
     }
 
 }
