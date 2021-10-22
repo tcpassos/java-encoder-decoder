@@ -3,13 +3,13 @@ Simples programa que dispõe de vários métodos de codificação e decodificaç
 
 ![Janela principal do programa](https://i.imgur.com/uQEr9PF.png)
 
-O programa é capaz de manipular um arquivo e operar nas seguintes funcionalidades:
-**Codificação:** Arquivo.txt -> Arquivo.enc
-**Decodificação:** Arquivo.enc -> Arquivo.dec
+O programa é capaz de manipular um arquivo e operar nas seguintes funcionalidades:<br>
+**Codificação:** Arquivo.txt -> Arquivo.enc<br>
+**Decodificação:** Arquivo.enc -> Arquivo.dec<br>
 **Tratamento de erro:** Arquivo.enc -> Arquivo.enc.ecc -> Arquivo.enc
 
 ## Implementando um enconder
-A classe `Encoder` possui dois contratos responsáveis pela codificação e decodificação de uma entrada de dados.
+A interface `Encoder` possui dois contratos responsáveis pela codificação e decodificação de uma entrada de dados.
 
 Tanto o método de codificação quanto o de decodificação recebem dois argumentos, sendo o primeiro a stream de dados do arquivo original e o segundo a stream de saída do arquivo processado.
 ```java
